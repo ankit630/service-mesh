@@ -1,0 +1,32 @@
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - BACKEND_URL=http://backend:4000
+    depends_on:
+      - backend
+    networks:
+      - microservices
+    container_name: frontend-service
+
+  backend:
+    build:
+      context: ./backend  
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - FLASK_DEBUG=false
+      - PORT=4000
+    networks:
+      - microservices
+    container_name: backend-service
+
+networks:
+  microservices:
+    driver: bridge
